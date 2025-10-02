@@ -1,14 +1,17 @@
 #!/bin/sh
 # entrypoint.sh
 
-# Używamy envsubst do podmiany zmiennych w naszym szablonie i tworzymy finalny plik konfiguracyjny
-# dla Tomcata w odpowiednim miejscu.
+# Krok 1: Generujemy plik konfiguracyjny z podstawionymi zmiennymi.
 envsubst < /usr/local/tomcat/conf/Catalina/localhost/context.xml.template > /usr/local/tomcat/conf/Catalina/localhost/ROOT.xml
 
-# Wyświetlamy wygenerowany plik w logach, żeby mieć pewność, że zmienne zostały wstawione
-echo "--- Wygenerowany plik konfiguracyjny bazy danych (ROOT.xml) ---"
-cat /usr/local/tomcat/conf/Catalina/localhost/ROOT.xml
-echo "--------------------------------------------------------"
+# Krok 2: Ustawiamy opcje Javy. Zmienna JAVA_OPTS jest standardem odczytywanym przez skrypt catalina.sh.
+# To jest pewniejsza metoda niż CATALINA_OPTS.
+export JAVA_OPTS="-Dhibernate.hbm2ddl.auto=update"
 
-# Uruchamiamy oryginalną komendę startową Tomcata
+echo "--- Ustawione opcje JAVA_OPTS ---"
+echo "$JAVA_OPTS"
+echo "---------------------------------"
+
+# Krok 3: Uruchamiamy oryginalną komendę startową Tomcata.
+# Skrypt catalina.sh automatycznie użyje zmiennej JAVA_OPTS.
 exec catalina.sh run
