@@ -6,7 +6,14 @@ envsubst < /usr/local/tomcat/conf/Catalina/localhost/context.xml.template > /usr
 
 echo "--- Konfiguracja bazy danych wygenerowana pomyślnie ---"
 
-# Krok 2: Uruchamiamy serwer Tomcat z bezpośrednio wstrzykniętą zmienną środowiskową.
-# Polecenie 'env' uruchamia program w zmodyfikowanym środowisku.
-# To gwarantuje, że proces Javy zobaczy naszą opcję.
-exec env JAVA_OPTS="-Dhibernate.hbm2ddl.auto=update" catalina.sh run
+# Krok 2: Ustawiamy opcje Javy Z OGRANICZENIAMI PAMIĘCI
+# Xms - startowa ilość pamięci, Xmx - maksymalna ilość pamięci
+# To jest kluczowe dla darmowego planu Render!
+export JAVA_OPTS="-Dhibernate.hbm2ddl.auto=update -Xms256m -Xmx400m"
+
+echo "--- Ustawione opcje JAVA_OPTS ---"
+echo "$JAVA_OPTS"
+echo "---------------------------------"
+
+# Krok 3: Uruchamiamy oryginalną komendę startową Tomcata.
+exec catalina.sh run
