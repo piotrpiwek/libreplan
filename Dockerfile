@@ -18,8 +18,8 @@ FROM tomcat:8.5-jdk8-temurin
 RUN rm -rf /usr/local/tomcat/webapps/*
 
 # Kopiujemy skompilowany plik .war z etapu 'builder' do katalogu webapps Tomcata
-# Zmieniamy nazwę na ROOT.war, aby aplikacja była dostępna pod głównym adresem URL
-COPY --from=builder /app/libreplan-webapp/target/libreplan.war /usr/local/tomcat/webapps/ROOT.war
+# Prawidłowa nazwa pliku to 'libreplan-webapp.war'
+COPY --from=builder /app/libreplan-webapp/target/libreplan-webapp.war /usr/local/tomcat/webapps/ROOT.war
 
 # Wystawiamy port, na którym nasłuchuje Tomcat
 EXPOSE 8080
