@@ -10,7 +10,7 @@ COPY . .
 
 # Uruchamiamy budowanie projektu za pomocą Maven. 
 # -DskipTests pomija testy, co znacznie przyspiesza budowanie obrazu.
-RUN mvn clean install -DskipTests
+RUN mvn clean install -DskipTests -Dliquibase.skip=true
 
 # ---
 # ETAP 2: Uruchomienie aplikacji na serwerze Tomcat
